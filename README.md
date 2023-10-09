@@ -8,3 +8,5 @@ CharPrint is a simple but flexible library intended for expressive text, such as
 The core of CharPrint is the Printable class. This is an object that represents some text, a collection of associated settings, and, optionally, an associated curses window.
 
 ## API Reference
+
+See the read the docs link.
