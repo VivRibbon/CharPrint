@@ -33,13 +33,163 @@
             
   <section id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h1>
+<section id="module-charprint">
+<span id="charprint"></span><h2>charprint<a class="headerlink" href="#module-charprint" title="Link to this heading">¶</a></h2>
+<p>The primary module of the library.</p>
 <dl class="py class">
+<dt class="sig sig-object py" id="charprint.Printable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">charprint.</span></span><span class="sig-name descname"><span class="pre">Printable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curses_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_speed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pause_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'.',</span> <span class="pre">'?',</span> <span class="pre">'!'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pause_delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrap_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_at_end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newline_option</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#charprint_types.NewlineStatus" title="charprint_types.NewlineStatus"><span class="pre">NewlineStatus</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">NewlineNone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#charprint.Printable" title="Link to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="py attribute">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">charprint.Printable()</span> <span class="pre">class:</span></span></dt>
+<span class="sig-name descname"><span class="pre">curses_enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></dt>
+<dd><p>If True, prints to a curses window instead of the bare console.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">The</span> <span class="pre">core</span> <span class="pre">Printable</span> <span class="pre">class.</span></span></dt>
+<span class="sig-name descname"><span class="pre">window</span> <span class="pre">=</span> <span class="pre">None</span></span></dt>
+<dd><p>If curses is enabled, this is the curses window this printable will print to. Otherwise is ignored.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">text_speed:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">40</span></span></dt>
+<dd><p>The amount of time in milliseconds to wait between each character when printing.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">pause_at:</span> <span class="pre">set</span> <span class="pre">=</span> <span class="pre">{&quot;.&quot;,</span> <span class="pre">&quot;?&quot;,</span> <span class="pre">&quot;!&quot;}</span></span></dt>
+<dd><p>Specific characters to pause for a longer (or shorter) time than the default text_speed. As this is a set, you don’t have to worry about cluttering it by accidentally adding multiples of the same character.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">pause_delay:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">200</span></span></dt>
+<dd><p>The amount of time in milliseconds to wait at the characters in the pause_at set.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">wrap_point:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">40</span></span></dt>
+<dd><p>The amount of characters after which the printer will wrap the text to the next line, givin you more formatting control and preventing words being split.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">wait_at_end:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></dt>
+<dd><p>If True, the program will wait for the user to press a key once the printing is complete.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">newline_option:</span> <span class="pre">Type[NewlineStatus]</span> <span class="pre">=</span> <span class="pre">NewlineNone</span></span></dt>
+<dd><p>A custom type with options NewlineNone, NewlineStart, NewlineEnd, or NewlineBoth (subclassing NewlineStatus). Adds a newline to the print at the beginning, end, both or nowhere.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">text:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></span></dt>
+<dd><p>The text that is printed by the printable instance.</p>
+</dd></dl>
+
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="charprint.Printable.char_print">
+<span class="sig-name descname"><span class="pre">char_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#charprint.Printable.char_print" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<p>Prints text to the curses window or console depending on curses_enabled. If text is given in the function argument it prints that text, otherwise it prints the given printable’s text field.</p>
+<p>The text is printed character by character, with text_speed delay (in ms) between each. The printer will pause for pause_at delay at any character in the pause_at set, if any. While printing, the text will be wrapped at wrap_point number of characters. If wait_at_end is True, after the text is printed the program will wait for the user to press a key before continuing. newline_option optionally adds a newline to the beginning or end or both of the printed text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em><em> or </em><em>None.</em>) – Option to print text passed in the function instead of the printable’s text field.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="charprint.Printable.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#charprint.Printable.clear" title="Link to this definition">¶</a></dt>
+<dd><p>Either clears the console or clears the Printable’s curses window.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="charprint.Printable.stream_out">
+<span class="sig-name descname"><span class="pre">stream_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_setting</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#charprint_types.StreamSetting" title="charprint_types.StreamSetting"><span class="pre">StreamSetting</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#charprint.Printable.stream_out" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Stream out a printable’s text field, for use in your own systems. Possible stream_settings:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stream_setting</strong> (<em>GenOut</em><em>, </em><em>WrappedGenOut</em><em>, </em><em>WordGenOut</em><em>, </em><em>ListOut</em><em>, </em><em>WordListOut</em><em>, or </em><em>WrappedListOut</em>) – How to return self.text.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A generator or list grouped by character, word, or wrap point.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str] or generator(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="support-functions">
+<h2>support functions<a class="headerlink" href="#support-functions" title="Link to this heading">¶</a></h2>
+<p>Various functions outside the class that provide additional functionality.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">charprint.clear_all_windows(windows:</span> <span class="pre">tuple[curses.window],</span> <span class="pre">refresh:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True):</span></span></dt>
+<dd><p>Clears a tuple of curses windows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>windows</strong> (<em>tuple</em><em>[</em><em>curses.window</em><em>]</em>) – Tuple of curses windows to clear.</p></li>
+<li><p><strong>refresh</strong> (<em>bool</em>) – If False, the windows will not automatically refresh. You must refresh the windows to see the change.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">charprint.refresh_all_windows(windows:</span> <span class="pre">tuple):</span></span></dt>
+<dd><p>Refreshes a tuple of curses windows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>windows</strong> (<em>tuple</em>) – Tuple of curses windows to refresh.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-charprint_types">
+<span id="charprint-types"></span><h2>charprint_types<a class="headerlink" href="#module-charprint_types" title="Link to this heading">¶</a></h2>
+<p>The module containing custom types used for toggling various options.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="charprint_types.NewlineStatus">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">charprint_types.</span></span><span class="sig-name descname"><span class="pre">NewlineStatus</span></span><a class="headerlink" href="#charprint_types.NewlineStatus" title="Link to this definition">¶</a></dt>
+<dd><p>Superclass that defines the “type” used to set NewlineStatus for a Printable.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="charprint_types.NewlineStatus.Subtypes">
+<span class="sig-name descname"><span class="pre">Subtypes</span></span><a class="headerlink" href="#charprint_types.NewlineStatus.Subtypes" title="Link to this definition">¶</a></dt>
+<dd><p>NewlineEnd, NewlineStart, NewlineBoth, NewlineNone</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="charprint_types.StreamSetting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">charprint_types.</span></span><span class="sig-name descname"><span class="pre">StreamSetting</span></span><a class="headerlink" href="#charprint_types.StreamSetting" title="Link to this definition">¶</a></dt>
+<dd><p>Superclass that defines the “type” used to set the return type for the stream out funciton.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="charprint_types.StreamSetting.Subtypes">
+<span class="sig-name descname"><span class="pre">Subtypes</span></span><a class="headerlink" href="#charprint_types.StreamSetting.Subtypes" title="Link to this definition">¶</a></dt>
+<dd><p>ListOut, WrappedListOut, WordListOut, GenOut, WordGenOut, WrappedGenOut</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 
 
@@ -62,7 +212,12 @@
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-charprint">charprint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#support-functions">support functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-charprint_types">charprint_types</a></li>
+</ul>
+</li>
 </ul>
 
 <div class="relations">

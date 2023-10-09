@@ -1,3 +1,9 @@
 pyproject.toml
 
 tests/
+
+__pycache__/
+
+*.log
+
+.mypy_cache/

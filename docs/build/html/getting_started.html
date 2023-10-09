@@ -14,6 +14,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" />
     <link rel="prev" title="Welcome to CharPrint’s documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -39,17 +40,63 @@
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install charprint</span>
 </pre></div>
 </div>
-<p>Note that the Windows version will require windows-curses wheels. They should be installed automatically, but if they don’t for some reason you can do so with</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install windows-curses</span>
+<p>Note that unicurses is a dependency, which should allow the library to work on Windows. It should be installed as a dependency, but if not you can install it with</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install uni-curses</span>
 </pre></div>
 </div>
 </section>
 <section id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">window1</span> <span class="o">=</span> <span class="n">initscr</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Printing to the console</span>
+
+<span class="c1"># Instantiate a printable object</span>
+<span class="n">console_printable</span> <span class="o">=</span> <span class="n">Printable</span><span class="p">(</span><span class="n">text_speed</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">pause_at</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;;&quot;</span><span class="p">},</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;This text will go to the console.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Print the printable</span>
+<span class="n">console_printable</span><span class="o">.</span><span class="n">char_print</span><span class="p">()</span>
+
+<span class="c1"># Change some settings</span>
+<span class="n">console_printable</span><span class="o">.</span><span class="n">newline</span> <span class="o">=</span> <span class="n">NewlineBoth</span>
+<span class="n">console_printable</span><span class="o">.</span><span class="n">wait_at_end</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># Print again, this time with text passed to the printing function</span>
+<span class="n">console_printable</span><span class="o">.</span><span class="n">slow_print</span><span class="p">(</span><span class="s2">&quot;The printable&#39;s text field is preserved, but this text is printed instead.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Clear the console</span>
+<span class="n">console_printable</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<span class="c1"># Printing with curses</span>
+
+<span class="c1"># Initialize some windows (see the Python curses module documentation for details on general curses functionality.)</span>
+<span class="n">window1</span> <span class="o">=</span> <span class="n">initscr</span><span class="p">()</span>
 <span class="n">window2</span> <span class="o">=</span> <span class="n">newwin</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
-<span class="n">window_one_printable</span> <span class="o">=</span> <span class="n">Printable</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;This is some example text&quot;</span><span class="o">.</span><span class="p">)</span>
+<span class="c1"># Instantiate printables with the created windows</span>
+<span class="n">window_one_printable</span> <span class="o">=</span> <span class="n">Printable</span><span class="p">(</span><span class="n">curses_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window1</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;This is some example text&quot;</span><span class="o">.</span><span class="p">)</span>
+<span class="n">window_two_printable</span> <span class="o">=</span> <span class="n">Printable</span><span class="p">(</span><span class="n">curses_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window2</span><span class="p">,</span> <span class="n">pause_delay</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span> <span class="n">wrap_point</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="n">wait_at_end</span><span class="p">:</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Print each printable&#39;s text to its assigned window</span>
+<span class="n">window_one_printable</span><span class="o">.</span><span class="n">char_print</span><span class="p">()</span>
+<span class="n">window_two_printable</span><span class="o">.</span><span class="n">char_print</span><span class="p">()</span>
+
+<span class="c1"># Create a new curses window and move the first printable to it</span>
+<span class="n">window3</span> <span class="o">=</span> <span class="n">newwin</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">window_one_printable</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">window3</span>
+<span class="n">window_one_printable</span><span class="o">.</span><span class="n">slow_print</span><span class="p">(</span><span class="s2">&quot;Passing text into the function works in curses too, of course.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Clear all three windows</span>
+<span class="n">clear_all_windows</span><span class="p">((</span><span class="n">window1</span><span class="p">,</span> <span class="n">window2</span><span class="p">,</span> <span class="n">window3</span><span class="p">))</span>
+
+<span class="c1"># Stream a printable&#39;s text out for use in an external function</span>
+
+<span class="c1"># Produce a list from the printable&#39;s characters</span>
+<span class="n">window_one_printable</span><span class="o">.</span><span class="n">stream_out</span><span class="p">(</span><span class="n">ListOut</span><span class="p">)</span>
+
+<span class="c1"># Produce a list of characters grouped by the wrap point</span>
+<span class="n">window_two_printable</span><span class="o">.</span><span class="n">stream_out</span><span class="p">(</span><span class="n">WrappedListOut</span><span class="p">)</span>
+
+<span class="c1"># Produce a generator that yields each word of the printable</span>
+<span class="n">window_one_printable</span><span class="o">.</span><span class="n">stream_out</span><span class="p">(</span><span class="n">WordGenOut</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -79,6 +126,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#quickstart">Quickstart</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 </ul>
 
 <div class="relations">
@@ -86,6 +134,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Welcome to CharPrint’s documentation!</a></li>
+      <li>Next: <a href="usage.html" title="next chapter">Usage</a></li>
   </ul></li>
 </ul>
 </div>

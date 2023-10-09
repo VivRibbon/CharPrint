@@ -1,30 +1,43 @@
 #!/usr/bin/env python3
 
+import curses
 from dataclasses import dataclass, field
 from typing import Type
 import pytest
 from time import sleep
-from textwrap import fill, wrap
+from textwrap import fill
 import console
 from console import utils as conutils
-import importlib
-from charprint_types import (
-    NewlineEnd,
-    NewlineStart,
-    NewlineNone,
-    NewlineBoth,
-    NewlineStatus,
-    StreamSetting,
-    ListOut,
-    WrappedListOut,
-    GenOut,
-    WordListOut,
-    WordGenOut,
-    WrappedGenOut,
-)
-from unicurses import *
 
-# TODO: Add a function that just outputs a string
+
+@dataclass
+class NewlineStatus(type):
+    _instances: dict = field(default_factory=dict)
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(NewlineStatus, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+@dataclass
+class Newline_Start(NewlineStatus):
+    pass
+
+
+@dataclass
+class Newline_End(NewlineStatus):
+    pass
+
+
+@dataclass
+class Newline_None(NewlineStatus):
+    pass
+
+
+@dataclass
+class Newline_Both(NewlineStatus):
+    pass
 
 
 class Printable:
@@ -39,7 +52,7 @@ class Printable:
         pause_delay: int = 200,
         wrap_point: int = 40,
         wait_at_end: bool = False,
-        newline_option: Type[NewlineStatus] = NewlineNone,
+        newline_option: Type[NewlineStatus] = Newline_None,
         text: str = "",
     ):
         """Init"""
@@ -78,11 +91,11 @@ Text: {self.text[0:40]}{f" ... {self.text[len(self.text) - 20: len(self.text) + 
                 self._newline = new_status
             else:
                 raise TypeError(
-                    f"{new_status} is not a valid Newline Status. Try NewlineStart, NewlineEnd, NewlineBoth, or NewlineNone"
+                    f"{new_status} is not a valid Newline Status. Try Newline_Start, Newline_End, Newline_Both, or Newline_None"
                 )
         except:
             raise TypeError(
-                f"{new_status} is not a valid Newline Status. Try NewlineStart, NewlineEnd, NewlineBoth, or NewlineNone"
+                f"{new_status} is not a valid Newline Status. Try Newline_Start, Newline_End, Newline_Both, or Newline_None"
             )
 
     @property
@@ -91,12 +104,12 @@ Text: {self.text[0:40]}{f" ... {self.text[len(self.text) - 20: len(self.text) + 
 
     @window.setter
     def window(self, new_window):
-        try:
+        if isinstance(new_window, curses.window) or new_window is None:
             self._window = new_window
-        except:
+        else:
             raise TypeError("Window must be a curses window or None.")
 
-    def char_print(self, text=None):
+    def slow_print(self, text=None):
         """Print dispatcher. Checks if there is anything in the text argument and sends either that or self.text to a print function depending on whether curses is enabled for that Printable."""
         if text != None:
             text_to_print = text
@@ -111,7 +124,7 @@ Text: {self.text[0:40]}{f" ... {self.text[len(self.text) - 20: len(self.text) + 
     def __curses_print(self, text_to_print):
         if self._window == None:
             raise TypeError("No curses window attached to this printable! ")
-        if self._newline is NewlineStart or self._newline is NewlineBoth:
+        if self._newline is Newline_Start or self._newline is Newline_Both:
             self._window.addch("\n")
 
         for c in fill(text_to_print, self.wrap_point):
@@ -122,7 +135,7 @@ Text: {self.text[0:40]}{f" ... {self.text[len(self.text) - 20: len(self.text) + 
             else:
                 sleep(self.text_speed / 1000)
 
-        if self._newline is NewlineEnd or self._newline is NewlineBoth:
+        if self._newline is Newline_End or self._newline is Newline_Both:
             self._window.addch("\n")
 
         if self.wait_at_end is True:
@@ -130,7 +143,7 @@ Text: {self.text[0:40]}{f" ... {self.text[len(self.text) - 20: len(self.text) + 
             self._window.getch()
 
     def __console_print(self, text_to_print):
-        if self._newline is NewlineStart or self._newline is NewlineBoth:
+        if self._newline is Newline_Start or self._newline is Newline_Both:
             print("\n")
 
         for c in fill(text_to_print, self.wrap_point):
@@ -140,7 +153,7 @@ Text: {self.text[0:40]}{f" ... {self.text[len(self.text) - 20: len(self.text) + 
             else:
                 sleep(self.text_speed / 1000)
 
-        if self._newline is NewlineEnd or self._newline is NewlineBoth:
+        if self._newline is Newline_End or self._newline is Newline_Both:
             print("\n")
 
         if self.wait_at_end:
@@ -163,30 +176,13 @@ Text: {self.text[0:40]}{f" ... {self.text[len(self.text) - 20: len(self.text) + 
         """Clears the console. The user is meant to use clear() as a frontend for this function."""
         conutils.cls()
 
-    def stream_out(self, stream_setting: Type[StreamSetting]):
-        """Produces a Printable's text property as a list of characters, wrapped characters, words, or as a generator that yields a series of individual characters, wrapped characters, or words allowing it to be used as input in your own systems."""
-        if stream_setting is ListOut:
-            return list(self.text)
-        elif stream_setting is WrappedListOut:
-            return wrap(self.text, self.wrap_point)
-        elif stream_setting is WordListOut:
-            return self.text.split()
-        elif stream_setting is GenOut:
-            return (c for c in self.text)
-        elif stream_setting is WordGenOut:
-            return (c for c in self.text.split())
-        elif stream_setting is WrappedGenOut:
-            return (c for c in wrap(self.text, self.wrap_point))
-        else:
-            raise TypeError("Invalid stream setting!")
 
-
-def clear_all_windows(windows: tuple, refresh: bool = True):
+def clear_all_windows(windows: tuple[curses.window], refresh: bool = True):
     """Clears all curses windows in the given tuple. If refresh is True, immediately refreshes all the passed windows."""
     for element in windows:
         element.erase()
-    if refresh is True:
-        refresh_all_windows(windows)
+        if refresh is True:
+            element.refresh()
 
 
 def refresh_all_windows(windows: tuple):
